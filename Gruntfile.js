@@ -5,7 +5,8 @@ module.exports = function(grunt) {
 
     concat: {
       dist: {
-        src: ['public/client/app.js',
+        src: [
+          'public/client/app.js',
           'public/client/link.js',
           'public/client/links.js',
           'public/client/linkView.js',
@@ -14,6 +15,15 @@ module.exports = function(grunt) {
           'public/client/router.js'
         ],
         dest: 'public/dist/<%= pkg.name %>.js'
+      },
+      lib: {
+        src: [
+          'public/lib/jquery.js',
+          'public/lib/underscore.js',
+          'public/lib/backbone.js',
+          'public/lib/handlebars.js'
+        ],
+        dest: 'public/dist/lib/lib.js'
       }
     },
 
@@ -39,6 +49,7 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'public/dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>'],
+          'public/dist/lib/lib.min.js': ['<%= concat.lib.dest %>']
         }
       }
     },
