@@ -1,8 +1,10 @@
-var db = require('../config');
-// var db = require('../mongo-config');
+//var db = require('../config');
+var db = require('../mongo-config');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var crypto = require('crypto');
 
-var Link = db.Model.extend({
+/*var Link = db.Model.extend({
   tableName: 'urls',
   hasTimestamps: true,
   defaults: {
@@ -15,6 +17,21 @@ var Link = db.Model.extend({
       model.set('code', shasum.digest('hex').slice(0, 5));
     });
   }
+});*/
+
+var linkSchema = new Schema({
+  url: String,
+  base_url: String,
+  code: String,
+  title: String,
+  visits: Number
 });
 
-module.exports = Link;
+linkSchema.pre('save', function(next) {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(this.get('url'));
+  this.set('code', shasum.digest('hex').slice(0, 5));
+  next();
+})
+
+module.exports = mongoose.model('Link', linkSchema);
